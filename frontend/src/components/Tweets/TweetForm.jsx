@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { clearTweetErrors, composeTweet } from "../../store/tweets";
 import TweetBox from "./TweetBox";
 
-function TweetCompose() {
+function TweetForm() {
   const [text, setText] = useState("");
   const dispatch = useDispatch();
   const newTweet = useSelector((state) => state.tweets.new);
@@ -38,4 +38,4 @@ function TweetCompose() {
   );
 }
 
-export default TweetCompose;
+export default TweetForm;
