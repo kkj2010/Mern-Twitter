@@ -1,31 +1,30 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { clearTweetErrors, composeTweet } from "../../store/tweets";
+import TweetBox from "./TweetBox";
 
-import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { clearTweetErrors, composeTweet } from '../../store/tweets';
-import TweetBox from './TweetBox';
-
-function TweetCompose () {
-  const [text, setText] = useState('');
+function TweetCompose() {
+  const [text, setText] = useState("");
   const dispatch = useDispatch();
-  const newTweet = useSelector(state => state.tweets.new);
-  const errors = useSelector(state => state.errors.tweets);
+  const newTweet = useSelector((state) => state.tweets.new);
+  const errors = useSelector((state) => state.errors.tweets);
 
   useEffect(() => {
     return () => dispatch(clearTweetErrors());
   }, [dispatch]);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(composeTweet({ text })); 
-    setText('');
+    dispatch(composeTweet({ text }));
+    setText("");
   };
 
-  const update = e => setText(e.currentTarget.value);
+  const update = (e) => setText(e.currentTarget.value);
 
   return (
     <>
       <form className="composeTweet" onSubmit={handleSubmit}>
-        <input 
+        <input
           type="textarea"
           value={text}
           onChange={update}
@@ -36,7 +35,7 @@ function TweetCompose () {
       </form>
       <TweetBox text={newTweet?.text} />
     </>
-  )
+  );
 }
 
 export default TweetCompose;
