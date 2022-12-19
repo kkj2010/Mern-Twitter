@@ -4,8 +4,10 @@ async function jwtFetch(url, options = {}) {
   // Set options.headers to an empty object if there is no headers.
   options.headers = options.headers || {};
   // Set the "Authorization" header to the value of "jwtToken" in localStorage.
-  options.headers["Authorization"] = localStorage.getItem("jwtToken");
-  
+  options.headers["Authorization"] = `Bearer ${localStorage.getItem(
+    "jwtToken"
+  )}`;
+
   // If the options.method is not 'GET', then set the "Content-Type" header to
   // "application/json".
   if (options.method.toUpperCase() !== "GET") {
@@ -25,16 +27,13 @@ async function jwtFetch(url, options = {}) {
   return res;
 }
 
-
-
 function getCookie(cookieName) {
-  const cookies = document.cookie.split(';');
+  const cookies = document.cookie.split(";");
   for (let cookie of cookies) {
-      const [name, value] = cookie.split('=');
-      if (name.trim() === cookieName) return value;
+    const [name, value] = cookie.split("=");
+    if (name.trim() === cookieName) return value;
   }
   return null;
 }
-
 
 export default jwtFetch;

@@ -1,5 +1,5 @@
-import jwtFetch from './jwt';
-import { RECEIVE_USER_LOGOUT } from './session';
+import jwtFetch from "./jwt";
+import { RECEIVE_USER_LOGOUT } from "./session";
 
 const RECEIVE_TWEETS = "tweets/RECEIVE_TWEETS";
 const RECEIVE_USER_TWEETS = "tweets/RECEIVE_USER_TWEETS";
@@ -7,34 +7,34 @@ const RECEIVE_NEW_TWEET = "tweets/RECEIVE_NEW_TWEET";
 const RECEIVE_TWEET_ERRORS = "tweets/RECEIVE_TWEET_ERRORS";
 const CLEAR_TWEET_ERRORS = "tweets/CLEAR_TWEET_ERRORS";
 
-const receiveTweets = tweets => ({
+const receiveTweets = (tweets) => ({
   type: RECEIVE_TWEETS,
-  tweets
+  tweets,
 });
 
-const receiveUserTweets = tweets => ({
+const receiveUserTweets = (tweets) => ({
   type: RECEIVE_USER_TWEETS,
-  tweets
+  tweets,
 });
 
-const receiveNewTweet = tweet => ({
+const receiveNewTweet = (tweet) => ({
   type: RECEIVE_NEW_TWEET,
-  tweet
+  tweet,
 });
 
-const receiveErrors = errors => ({
+const receiveErrors = (errors) => ({
   type: RECEIVE_TWEET_ERRORS,
-  errors
+  errors,
 });
 
-export const clearTweetErrors = errors => ({
-    type: CLEAR_TWEET_ERRORS,
-    errors
+export const clearTweetErrors = (errors) => ({
+  type: CLEAR_TWEET_ERRORS,
+  errors,
 });
 
-export const fetchTweets = () => async dispatch => {
+export const fetchTweets = () => async (dispatch) => {
   try {
-    const res = await jwtFetch ('/api/tweets');
+    const res = await jwtFetch("/api/tweets");
     const tweets = await res.json();
     dispatch(receiveTweets(tweets));
   } catch (err) {
@@ -45,12 +45,12 @@ export const fetchTweets = () => async dispatch => {
   }
 };
 
-export const fetchUserTweets = id => async dispatch => {
+export const fetchUserTweets = (id) => async (dispatch) => {
   try {
     const res = await jwtFetch(`/api/tweets/user/${id}`);
     const tweets = await res.json();
     dispatch(receiveUserTweets(tweets));
-  } catch(err) {
+  } catch (err) {
     const resBody = await err.json();
     if (resBody.statusCode === 400) {
       return dispatch(receiveErrors(resBody.errors));
@@ -58,15 +58,15 @@ export const fetchUserTweets = id => async dispatch => {
   }
 };
 
-export const composeTweet = data => async dispatch => {
+export const composeTweet = (data) => async (dispatch) => {
   try {
-    const res = await jwtFetch('/api/tweets/', {
-      method: 'POST',
-      body: JSON.stringify(data)
+    const res = await jwtFetch("/api/tweets", {
+      method: "POST",
+      body: JSON.stringify(data),
     });
     const tweet = await res.json();
     dispatch(receiveNewTweet(tweet));
-  } catch(err) {
+  } catch (err) {
     const resBody = await err.json();
     if (resBody.statusCode === 400) {
       return dispatch(receiveErrors(resBody.errors));
@@ -77,7 +77,7 @@ export const composeTweet = data => async dispatch => {
 const nullErrors = null;
 
 export const tweetErrorsReducer = (state = nullErrors, action) => {
-  switch(action.type) {
+  switch (action.type) {
     case RECEIVE_TWEET_ERRORS:
       return action.errors;
     case RECEIVE_NEW_TWEET:
@@ -88,16 +88,19 @@ export const tweetErrorsReducer = (state = nullErrors, action) => {
   }
 };
 
-const tweetsReducer = (state = { all: {}, user: {}, new: undefined }, action) => {
-  switch(action.type) {
+const tweetsReducer = (
+  state = { all: {}, user: {}, new: undefined },
+  action
+) => {
+  switch (action.type) {
     case RECEIVE_TWEETS:
-      return { ...state, all: action.tweets, new: undefined};
+      return { ...state, all: action.tweets, new: undefined };
     case RECEIVE_USER_TWEETS:
-      return { ...state, user: action.tweets, new: undefined};
+      return { ...state, user: action.tweets, new: undefined };
     case RECEIVE_NEW_TWEET:
-      return { ...state, new: action.tweet};
+      return { ...state, new: action.tweet };
     case RECEIVE_USER_LOGOUT:
-      return { ...state, user: {}, new: undefined }
+      return { ...state, user: {}, new: undefined };
     default:
       return state;
   }
